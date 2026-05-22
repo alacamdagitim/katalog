@@ -1,6 +1,10 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  env: {
+    ADMIN_PASSWORD: process.env.ADMIN_PASSWORD,
+    ADMIN_SECRET: process.env.ADMIN_SECRET,
+  },
   images: {
     formats: ["image/avif", "image/webp"],
     remotePatterns: [

@@ -1,12 +1,10 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
 export function AdminHeaderLogin() {
-  const router = useRouter();
   const panelRef = useRef<HTMLDivElement>(null);
   const [open, setOpen] = useState(false);
   const [password, setPassword] = useState("");
@@ -42,6 +40,7 @@ export function AdminHeaderLogin() {
     const response = await fetch("/api/admin/auth/login", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
+      credentials: "same-origin",
       body: JSON.stringify({ password }),
     });
 
@@ -55,8 +54,7 @@ export function AdminHeaderLogin() {
 
     setOpen(false);
     setPassword("");
-    router.push("/admin");
-    router.refresh();
+    window.location.assign("/admin");
   }
 
   return (

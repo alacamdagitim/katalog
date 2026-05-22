@@ -1,8 +1,6 @@
-const SESSION_MAX_AGE = 60 * 60 * 24 * 7;
+import { ADMIN_SECRET } from "@/lib/admin-config";
 
-function getSecret(): string {
-  return process.env.ADMIN_SECRET || process.env.ADMIN_PASSWORD || "";
-}
+const SESSION_MAX_AGE = 60 * 60 * 24 * 7;
 
 function toHex(buffer: ArrayBuffer): string {
   return Array.from(new Uint8Array(buffer))
@@ -31,24 +29,22 @@ async function signPayload(payload: string, secret: string): Promise<string> {
 export const ADMIN_COOKIE = "katalog_admin";
 
 export function isAdminConfigured(): boolean {
-  return Boolean(getSecret());
+  return Boolean(ADMIN_SECRET);
 }
 
 export async function createSessionToken(): Promise<string> {
-  const secret = getSecret();
   const payload = `${Date.now()}:${crypto.randomUUID().replace(/-/g, "")}`;
-  const signature = await signPayload(payload, secret);
+  const signature = await signPayload(payload, ADMIN_SECRET);
   return `${payload}.${signature}`;
 }
 
 export async function verifySessionToken(token: string | undefined): Promise<boolean> {
-  const secret = getSecret();
-  if (!token || !secret) return false;
+  if (!token || !ADMIN_SECRET) return false;
 
   const [payload, signature] = token.split(".");
   if (!payload || !signature) return false;
 
-  const expected = await signPayload(payload, secret);
+  const expected = await signPayload(payload, ADMIN_SECRET);
   if (signature.length !== expected.length) return false;
 
   let mismatch = 0;
