@@ -1,5 +1,6 @@
 "use client";
 
+import { useMemo } from "react";
 import { create } from "zustand";
 import { products as catalogProducts } from "@/data/products";
 import { searchProducts } from "@/lib/search";
@@ -7,6 +8,7 @@ import type { CatalogFilters, Product } from "@/types/product";
 import { EMPTY_FILTERS } from "@/types/product";
 
 const MAX_COMPARE = 4;
+const EMPTY_COMPARE_PRODUCTS: Product[] = [];
 
 interface CatalogState {
   products: Product[];
@@ -21,6 +23,7 @@ interface CatalogState {
   setQuery: (query: string) => void;
   setFilters: (filters: CatalogFilters) => void;
   toggleFilter: (key: keyof CatalogFilters, value: string) => void;
+  setFilterValue: (key: keyof CatalogFilters, value: string | null) => void;
   clearFilters: () => void;
   openProduct: (product: Product) => void;
   closeProduct: () => void;
@@ -30,6 +33,7 @@ interface CatalogState {
   openCompare: () => void;
   closeCompare: () => void;
   setMobileFiltersOpen: (open: boolean) => void;
+  setProducts: (products: Product[]) => void;
   getCompareProducts: () => Product[];
   isInCompare: (productId: number) => boolean;
 }
@@ -73,6 +77,23 @@ export const useCatalogStore = create<CatalogState>((set, get) => ({
     set({ filters: newFilters, results: runSearch(products, query, newFilters) });
   },
 
+  setFilterValue: (key, value) => {
+    const { products, query, filters } = get();
+    const nextFilters: CatalogFilters = {
+      ...filters,
+      [key]: value ? [value] : [],
+    };
+
+    if (key === "category") {
+      nextFilters.type = [];
+      nextFilters.volume = [];
+    } else if (key === "type") {
+      nextFilters.volume = [];
+    }
+
+    set({ filters: nextFilters, results: runSearch(products, query, nextFilters) });
+  },
+
   clearFilters: () => {
     const { products, query } = get();
     set({
@@ -109,6 +130,11 @@ export const useCatalogStore = create<CatalogState>((set, get) => ({
 
   setMobileFiltersOpen: (open) => set({ isMobileFiltersOpen: open }),
 
+  setProducts: (products) => {
+    const { query, filters } = get();
+    set({ products, results: runSearch(products, query, filters) });
+  },
+
   getCompareProducts: () => {
     const { products, compareIds } = get();
     return compareIds
@@ -118,3 +144,16 @@ export const useCatalogStore = create<CatalogState>((set, get) => ({
 
   isInCompare: (productId) => get().compareIds.includes(productId),
 }));
+
+export function useCompareProducts(): Product[] {
+  const compareIds = useCatalogStore((state) => state.compareIds);
+  const products = useCatalogStore((state) => state.products);
+
+  return useMemo(() => {
+    if (compareIds.length === 0) return EMPTY_COMPARE_PRODUCTS;
+
+    return compareIds
+      .map((id) => products.find((p) => p.id === id))
+      .filter((p): p is Product => Boolean(p));
+  }, [compareIds, products]);
+}

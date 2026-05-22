@@ -24,6 +24,7 @@ export interface Product {
   color: string;
   price: string;
   image: string;
+  productUrl?: string;
   description?: string;
   specifications?: Record<string, string>;
   variants?: ProductVariant[];
@@ -31,6 +32,7 @@ export interface Product {
 }
 
 export interface CatalogFilters {
+  category: string[];
   type: string[];
   material: string[];
   volume: string[];
@@ -42,6 +44,7 @@ export interface CatalogFilters {
 export type FilterKey = keyof CatalogFilters;
 
 export const FILTER_LABELS: Record<FilterKey, string> = {
+  category: "Marka",
   type: "Tür",
   material: "Materyal",
   volume: "Hacim",
@@ -50,7 +53,14 @@ export const FILTER_LABELS: Record<FilterKey, string> = {
   color: "Renk",
 };
 
+export const TOOLBAR_FILTER_KEYS: FilterKey[] = [
+  "category",
+  "type",
+  "volume",
+];
+
 export const EMPTY_FILTERS: CatalogFilters = {
+  category: [],
   type: [],
   material: [],
   volume: [],
@@ -60,17 +70,33 @@ export const EMPTY_FILTERS: CatalogFilters = {
 };
 
 export const TRENDING_SEARCHES = [
-  "karton bardak",
-  "kraft poşet",
-  "sushi kutusu",
-  "termal etiket",
-  "PET şişe",
+  "espresso makinesi",
+  "filtre kahve",
+  "demlik poşet çay",
+  "barista ekipman",
+  "unicomix",
 ];
 
 export const SUGGESTED_CATEGORIES = [
-  "Karton Bardak",
-  "Poşet & Ambalaj",
-  "Gıda Kutuları",
-  "Temizlik",
-  "Servis Malzemeleri",
+  "Unicomix",
+  "Fo",
+  "Limpo",
+  "Repo",
+  "The Coffee Warehouse",
+  "Süzer Çay",
+  "Ünver",
+  "Başaraslan",
+  "City Çay",
+];
+
+export const SUPPLIER_ORDER = [
+  "Unicomix",
+  "Fo",
+  "Limpo",
+  "Repo",
+  "The Coffee Warehouse",
+  "Süzer Çay",
+  "Ünver",
+  "Başaraslan",
+  "City Çay",
 ];

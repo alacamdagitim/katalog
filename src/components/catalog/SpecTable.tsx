@@ -17,28 +17,26 @@ export function SpecTable({
   if (entries.length === 0) return null;
 
   return (
-    <div className={cn("overflow-hidden rounded-xl border border-neutral-200/80 bg-white", className)}>
+    <div className={cn("overflow-hidden rounded-sm border border-border bg-background", className)}>
       <table className="w-full text-left">
         <tbody>
           {entries.map(([key, value], index) => (
             <tr
               key={key}
-              className={cn(
-                index !== entries.length - 1 && "border-b border-neutral-100"
-              )}
+              className={cn(index !== entries.length - 1 && "border-b border-border")}
             >
               <th
                 className={cn(
-                  "font-medium text-neutral-500",
-                  compact ? "px-4 py-2.5 text-xs" : "px-5 py-3.5 text-sm"
+                  "w-1/3 bg-background type-caption font-medium",
+                  compact ? "px-3 py-2.5" : "px-4 py-3"
                 )}
               >
                 {key}
               </th>
               <td
                 className={cn(
-                  "text-neutral-900",
-                  compact ? "px-4 py-2.5 text-xs" : "px-5 py-3.5 text-sm"
+                  "text-sm text-foreground",
+                  compact ? "px-3 py-2.5" : "px-4 py-3"
                 )}
               >
                 {value}
@@ -53,9 +51,7 @@ export function SpecTable({
 
 export function CompareSpecTable({ products }: { products: Product[] }) {
   const allKeys = Array.from(
-    new Set(
-      products.flatMap((p) => Object.keys(p.specifications ?? {}))
-    )
+    new Set(products.flatMap((p) => Object.keys(p.specifications ?? {})))
   );
 
   const rows: { label: string; values: string[] }[] = [
@@ -77,17 +73,17 @@ export function CompareSpecTable({ products }: { products: Product[] }) {
   ];
 
   return (
-    <div className="overflow-x-auto rounded-xl border border-neutral-200/80 bg-white">
+    <div className="overflow-x-auto rounded-sm border border-border bg-background">
       <table className="w-full min-w-[640px] text-left text-sm">
         <thead>
-          <tr className="border-b border-neutral-200 bg-neutral-50/80">
-            <th className="sticky left-0 z-10 bg-neutral-50/95 px-4 py-3 font-medium text-neutral-500">
+          <tr className="border-b border-border bg-background">
+            <th className="sticky left-0 z-10 bg-background px-3 py-2.5 type-caption font-medium">
               Özellik
             </th>
             {products.map((product) => (
               <th
                 key={product.id}
-                className="min-w-[160px] px-4 py-3 font-medium text-neutral-900"
+                className="min-w-[160px] border-l border-border px-3 py-2.5 text-sm font-semibold text-foreground"
               >
                 {product.title}
               </th>
@@ -98,13 +94,13 @@ export function CompareSpecTable({ products }: { products: Product[] }) {
           {rows.map((row, index) => (
             <tr
               key={row.label}
-              className={cn(index !== rows.length - 1 && "border-b border-neutral-100")}
+              className={cn(index !== rows.length - 1 && "border-b border-border")}
             >
-              <td className="sticky left-0 z-10 bg-white px-4 py-3 font-medium text-neutral-500">
+              <td className="sticky left-0 z-10 bg-background px-3 py-2.5 type-caption font-medium">
                 {row.label}
               </td>
               {row.values.map((value, i) => (
-                <td key={i} className="px-4 py-3 text-neutral-800">
+                <td key={i} className="border-l border-border px-3 py-2.5 text-foreground">
                   {value}
                 </td>
               ))}

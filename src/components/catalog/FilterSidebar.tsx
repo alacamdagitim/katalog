@@ -9,6 +9,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 
 const FILTER_KEYS: FilterKey[] = [
+  "category",
   "type",
   "material",
   "volume",
@@ -58,7 +59,7 @@ export function FilterSidebar({ className, onClose }: FilterSidebarProps) {
       <ScrollArea className="h-[calc(100vh-12rem)] pr-3 lg:h-[calc(100vh-16rem)]">
         <div className="space-y-6">
           {FILTER_KEYS.map((key, index) => {
-            const options = getFilterOptions(products, key);
+            const options = getFilterOptions(products, key, filters);
             if (options.length === 0) return null;
 
             return (

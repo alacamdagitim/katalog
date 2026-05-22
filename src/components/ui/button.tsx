@@ -4,24 +4,21 @@ import * as React from "react";
 import { cn } from "@/lib/utils";
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-lg text-sm font-medium transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-400 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
+  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-sm text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-foreground disabled:pointer-events-none disabled:opacity-40 [&_svg]:pointer-events-none [&_svg]:size-3.5 [&_svg]:shrink-0",
   {
     variants: {
       variant: {
-        default:
-          "bg-neutral-900 text-white hover:bg-neutral-800 active:scale-[0.98]",
-        secondary:
-          "bg-neutral-100 text-neutral-900 hover:bg-neutral-200 active:scale-[0.98]",
-        outline:
-          "border border-neutral-200 bg-white text-neutral-700 hover:bg-neutral-50 hover:border-neutral-300",
-        ghost: "text-neutral-600 hover:bg-neutral-100 hover:text-neutral-900",
-        link: "text-neutral-900 underline-offset-4 hover:underline",
+        default: "border border-foreground bg-foreground text-background hover:bg-background hover:text-foreground",
+        secondary: "border border-border bg-background text-foreground hover:border-[var(--border-strong)]",
+        outline: "border border-border bg-background text-foreground hover:border-[var(--border-strong)]",
+        ghost: "text-muted-foreground hover:text-foreground",
+        link: "text-foreground underline-offset-4 hover:underline",
       },
       size: {
-        default: "h-10 px-4 py-2",
-        sm: "h-8 rounded-md px-3 text-xs",
-        lg: "h-12 rounded-xl px-6 text-base",
-        icon: "h-9 w-9",
+        default: "h-9 px-4",
+        sm: "h-8 px-3 text-xs",
+        lg: "h-10 px-5",
+        icon: "h-8 w-8",
       },
     },
     defaultVariants: {

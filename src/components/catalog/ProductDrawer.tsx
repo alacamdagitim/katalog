@@ -1,6 +1,6 @@
 "use client";
 
-import { FileDown, GitCompareArrows, Package } from "lucide-react";
+import { ExternalLink, FileDown, GitCompareArrows, Package } from "lucide-react";
 import { ProductImage } from "@/components/catalog/ProductImage";
 import { SpecTable } from "@/components/catalog/SpecTable";
 import { Button } from "@/components/ui/button";
@@ -34,56 +34,64 @@ export function ProductDrawer() {
   return (
     <Sheet open={isOpen} onOpenChange={(open) => !open && closeProduct()}>
       <SheetContent side="right" className="w-full overflow-y-auto p-0 sm:max-w-xl lg:max-w-2xl">
-        <div className="relative aspect-[16/10] w-full bg-neutral-100">
+        <div className="relative aspect-square w-full border-b border-border bg-background">
           <ProductImage
             src={product.image}
             alt={product.title}
             category={product.category}
             priority
+            className="p-6"
           />
         </div>
 
-        <div className="px-6 pb-8">
-          <SheetHeader className="px-0 pt-6">
-            <p className="text-xs font-medium uppercase tracking-wider text-neutral-400">
-              {product.category} · {product.sku}
+        <div className="px-5 pb-8">
+          <SheetHeader className="px-0 pt-5">
+            <p className="catalog-label">
+              {product.category} / {product.sku}
             </p>
-            <SheetTitle className="text-2xl leading-tight">{product.title}</SheetTitle>
+            <SheetTitle className="type-display text-xl">{product.title}</SheetTitle>
             {product.description && (
-              <SheetDescription className="text-base leading-relaxed">
-                {product.description}
-              </SheetDescription>
+              <SheetDescription>{product.description}</SheetDescription>
             )}
           </SheetHeader>
 
-          <div className="mt-6 flex items-center justify-between">
-            <p className="text-2xl font-semibold tracking-tight text-neutral-900">
+          <div className="mt-5 flex items-stretch justify-between gap-4 overflow-hidden rounded-sm border border-border">
+            <p className="type-price flex items-center border-r border-border px-4 py-3 text-lg">
               {formatPrice(product.price)}
             </p>
-            <div className="flex gap-2">
+            <div className="flex flex-wrap">
+              {product.productUrl && (
+                <Button variant="ghost" size="sm" asChild className="border-l border-border">
+                  <a href={product.productUrl} target="_blank" rel="noopener noreferrer">
+                    <ExternalLink className="h-3.5 w-3.5" />
+                    Sitede Gör
+                  </a>
+                </Button>
+              )}
               <Button
-                variant="outline"
+                variant="ghost"
                 size="sm"
                 className={cn(
-                  inCompare && "border-neutral-900 bg-neutral-900 text-white hover:bg-neutral-800"
+                  "border-l border-border",
+                  inCompare && "bg-foreground text-background hover:bg-foreground hover:text-background"
                 )}
                 onClick={() => toggleCompare(product.id)}
               >
-                <GitCompareArrows className="h-4 w-4" />
-                {inCompare ? "Karşılaştırmada" : "Karşılaştır"}
+                <GitCompareArrows className="h-3.5 w-3.5" />
+                {inCompare ? "Seçili" : "Karşılaştır"}
               </Button>
-              <Button variant="outline" size="sm" onClick={handleExportPdf}>
-                <FileDown className="h-4 w-4" />
+              <Button variant="ghost" size="sm" onClick={handleExportPdf} className="border-l border-border">
+                <FileDown className="h-3.5 w-3.5" />
                 PDF
               </Button>
             </div>
           </div>
 
-          <Separator className="my-8" />
+          <Separator className="my-6" />
 
           {product.specifications && (
-            <section className="mb-8">
-              <h3 className="mb-4 text-sm font-semibold text-neutral-900">
+            <section className="mb-6">
+              <h3 className="catalog-label mb-3 border-b border-border pb-2">
                 Teknik Özellikler
               </h3>
               <SpecTable specifications={product.specifications} />
@@ -91,19 +99,19 @@ export function ProductDrawer() {
           )}
 
           {product.variants && product.variants.length > 0 && (
-            <section className="mb-8">
-              <h3 className="mb-4 text-sm font-semibold text-neutral-900">Varyantlar</h3>
-              <div className="space-y-2">
+            <section className="mb-6">
+              <h3 className="catalog-label mb-3 border-b border-border pb-2">Varyantlar</h3>
+              <div className="divide-y divide-border overflow-hidden rounded-sm border border-border">
                 {product.variants.map((variant) => (
                   <div
                     key={variant.sku}
-                    className="flex items-center justify-between rounded-xl border border-neutral-200/80 bg-white px-4 py-3"
+                    className="flex items-center justify-between bg-background px-4 py-2.5"
                   >
                     <div>
-                      <p className="text-sm font-medium text-neutral-900">{variant.name}</p>
-                      <p className="font-mono text-xs text-neutral-400">{variant.sku}</p>
+                      <p className="text-sm font-medium text-foreground">{variant.name}</p>
+                      <p className="type-meta">{variant.sku}</p>
                     </div>
-                    <p className="text-sm font-semibold text-neutral-900">
+                    <p className="type-price text-sm">
                       {formatPrice(variant.price)}
                     </p>
                   </div>
@@ -114,35 +122,35 @@ export function ProductDrawer() {
 
           {product.packaging && (
             <section>
-              <h3 className="mb-4 flex items-center gap-2 text-sm font-semibold text-neutral-900">
-                <Package className="h-4 w-4 text-neutral-400" />
-                Paketleme Detayları
+              <h3 className="catalog-label mb-3 flex items-center gap-2 border-b border-border pb-2">
+                <Package className="h-3.5 w-3.5" strokeWidth={1.5} />
+                Paketleme
               </h3>
-              <div className="grid grid-cols-2 gap-3 rounded-xl border border-neutral-200/80 bg-white p-4 sm:grid-cols-3">
-                <div>
-                  <p className="text-xs text-neutral-400">Birim</p>
-                  <p className="mt-1 text-sm font-medium text-neutral-900">
+              <div className="grid grid-cols-2 gap-px overflow-hidden rounded-sm border border-border bg-border sm:grid-cols-3">
+                <div className="bg-background p-3">
+                  <p className="catalog-label">Birim</p>
+                  <p className="mt-1 text-sm font-medium text-foreground">
                     {product.packaging.unit}
                   </p>
                 </div>
-                <div>
-                  <p className="text-xs text-neutral-400">Adet</p>
-                  <p className="mt-1 text-sm font-medium text-neutral-900">
+                <div className="bg-background p-3">
+                  <p className="catalog-label">Adet</p>
+                  <p className="mt-1 text-sm font-medium tabular-nums text-foreground">
                     {product.packaging.quantity.toLocaleString("tr-TR")}
                   </p>
                 </div>
                 {product.packaging.dimensions && (
-                  <div>
-                    <p className="text-xs text-neutral-400">Boyut</p>
-                    <p className="mt-1 text-sm font-medium text-neutral-900">
+                  <div className="bg-background p-3">
+                    <p className="catalog-label">Boyut</p>
+                    <p className="mt-1 text-sm font-medium text-foreground">
                       {product.packaging.dimensions}
                     </p>
                   </div>
                 )}
                 {product.packaging.weight && (
-                  <div>
-                    <p className="text-xs text-neutral-400">Ağırlık</p>
-                    <p className="mt-1 text-sm font-medium text-neutral-900">
+                  <div className="bg-background p-3">
+                    <p className="catalog-label">Ağırlık</p>
+                    <p className="mt-1 text-sm font-medium text-foreground">
                       {product.packaging.weight}
                     </p>
                   </div>

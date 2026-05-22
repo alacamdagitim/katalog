@@ -1,4 +1,5 @@
 import { products as allProducts } from "@/data/products";
+import { BrandLogo } from "@/components/BrandLogo";
 import { SpecTable } from "@/components/catalog/SpecTable";
 import { formatPrice } from "@/lib/utils";
 import { PrintActions } from "./PrintActions";
@@ -28,11 +29,12 @@ export default async function PrintCatalogPage({
 
       <div className="mx-auto max-w-4xl px-8 py-10 print:max-w-none print:px-0 print:py-0">
         <header className="mb-10 border-b border-neutral-200 pb-6 print:mb-8">
-          <p className="text-xs font-medium uppercase tracking-[0.2em] text-neutral-400">
+          <BrandLogo href={null} className="h-10" />
+          <p className="mt-4 text-sm text-neutral-500">
             Katalog · B2B
           </p>
           <h1 className="mt-2 text-3xl font-semibold tracking-tight">
-            Ürün Kataloğu
+            Ürün kataloğu
           </h1>
           <p className="mt-2 text-sm text-neutral-500">
             {new Date().toLocaleDateString("tr-TR", {
@@ -56,13 +58,13 @@ export default async function PrintCatalogPage({
 
               <div className="grid gap-8 print:grid-cols-[180px_1fr]">
                 <div className="flex aspect-square items-center justify-center rounded-xl border border-neutral-200 bg-neutral-50 print:aspect-auto print:h-40">
-                  <span className="text-center text-xs uppercase tracking-widest text-neutral-400">
+                  <span className="text-center text-sm text-neutral-400">
                     {product.category}
                   </span>
                 </div>
 
                 <div>
-                  <p className="font-mono text-xs text-neutral-400">{product.sku}</p>
+                  <p className="text-sm tabular-nums text-neutral-400">{product.sku}</p>
                   <h2 className="mt-1 text-2xl font-semibold tracking-tight">
                     {product.title}
                   </h2>
